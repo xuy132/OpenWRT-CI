@@ -7,16 +7,16 @@ find ./feeds/luci/collections/ -type f -name "Makefile" -exec sed -i "/attendeds
 #修改默认主题
 find ./feeds/luci/collections/ -type f -name "Makefile" -exec sed -i "s/luci-theme-bootstrap/luci-theme-$WRT_THEME/g" {} +
 #修改immortalwrt.lan关联IP
-find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js" -exec sed -i "s/192\.168\.[0-9]*\.[0-9]*/$WRT_IP/g" {} +
+find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js" -exec sed -i "s/10\.0\.[0]*\.[2]*/$WRT_IP/g" {} +
 #添加编译日期标识
 find ./feeds/luci/modules/luci-mod-status/ -type f -name "10_system.js" -exec sed -i "s/(\(luciversion || ''\))/(\1) + (' \/ $WRT_MARK-$WRT_DATE')/g" {} +
 
 WIFI_UC="./package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc"
 if [ -f "$WIFI_UC" ]; then
 	#修改WIFI名称
-	sed -i "s/ssid='Pd*'/ssid='$WRT_SSID'/g" $WIFI_UC
+	sed -i "s/ssid='Pd'/ssid='$WRT_SSID'/g" $WIFI_UC
 	#修改WIFI密码
-	sed -i "s/key='12345678*'/key='$WRT_WORD'/g" $WIFI_UC
+	sed -i "s/key='12345678'/key='$WRT_WORD'/g" $WIFI_UC
 fi
 
 CFG_FILE="./package/base-files/files/bin/config_generate"
