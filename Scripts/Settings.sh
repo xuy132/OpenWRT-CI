@@ -18,7 +18,12 @@ if [ -f "$WIFI_UC" ]; then
 	#修改WIFI密码
 	sed -i "s/key='.*'/key='$WRT_WORD'/g" $WIFI_UC
 fi
-
+# 修改默认 WiFi 名称为 Pd
+uci -q batch <<EOT
+set wireless.default_radio0.ssid='Pd'
+set wireless.default_radio1.ssid='Pp'
+commit wireless
+EOT
 CFG_FILE="./package/base-files/files/bin/config_generate"
 #修改默认IP地址
 sed -i "s/192\.168\.[0-9]*\.[0-9]*/$WRT_IP/g" $CFG_FILE
