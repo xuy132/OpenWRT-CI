@@ -1,0 +1,23 @@
+name: Auto Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 22 * * *' # 北京时间每天早上 6 点（对应 UTC 时间 22:00）
+  workflow_dispatch: # 支持在 GitHub 页面手动点击按钮触发同步
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pull upstream changes
+        uses: dabreadman/sync-upstream-repo@v1.3.0
+        with:
+          upstream_branch: main
+          upstream_repo: https://github.com/VIKINGYFY/OpenWRT-CI.git # 如果你的上游仓库是其他地址，请在这里修改
+          branch: main
+          token: ${{ secrets.GITHUB_TOKEN }}
