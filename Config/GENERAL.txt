@@ -22,7 +22,7 @@ CONFIG_PACKAGE_luci-lua-runtime=y
 CONFIG_LUCI_LANG_zh_Hans=y
 
 # 轻量主题
-CONFIG_PACKAGE_luci-theme-argon=y
+#CONFIG_PACKAGE_luci-theme-argon=n
 
 # ------ 核心功能 ------
 # PassWall2 + VLESS
@@ -64,7 +64,7 @@ CONFIG_PACKAGE_luci-app-openclash=n
 CONFIG_PACKAGE_luci-app-ssr-plus=n
 CONFIG_PACKAGE_luci-app-passwall=n
 CONFIG_PACKAGE_luci-app-nikki=n
-CONFIG_PACKAGE_luci-app-mosdns=n
+CONFIG_PACKAGE_luci-app-mosdns=y
 
 CONFIG_PACKAGE_luci-app-samba4=n
 CONFIG_PACKAGE_luci-app-dockerman=n
