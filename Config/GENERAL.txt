@@ -1,20 +1,19 @@
 # =================================================================
-# 京东云亚瑟 512MB 极致精简与性能优化配置 (PassWall2 + MosDNS + 集客AC)
-# 兼容当前 VIKINGYFY/immortalwrt owrt 分支 + OpenSSL 3.5.x
+# 京东云亚瑟 512MB 精简稳定配置
+# 目标：PassWall2（支持 VLESS）+ 集客AC，优先保证编译通过
 # =================================================================
 
-# ------ 核心系统组件（保持系统基本运行） ------
+# ------ 核心系统 ------
 CONFIG_TARGET_PER_DEVICE_ROOTFS=y
 CONFIG_PACKAGE_luci=y
 CONFIG_LUCI_LANG_zh_Hans=y
 
-# 使用更轻量、低内存友好的 Argon 主题（也可改回 vantage）
+# 轻量主题（低内存友好）
 CONFIG_PACKAGE_luci-theme-argon=y
-# CONFIG_PACKAGE_luci-theme-vantage is not set
 
-# ------ 【保留】核心需要的三大插件功能 ------
+# ------ 核心功能（必须保留） ------
 
-# 1. PassWall 2 及其核心依赖（完美支持 VLESS/REALITY）
+# PassWall2 + VLESS 支持
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-app-passwall2_I18n_zh-cn=y
 CONFIG_PACKAGE_xray-core=y
@@ -22,50 +21,44 @@ CONFIG_PACKAGE_chinadns-ng=y
 CONFIG_PACKAGE_v2ray-geoip=y
 CONFIG_PACKAGE_v2ray-geosite=y
 
-# 2. MosDNS 及其全家桶（国内 DNS 解析与分流必备）
-CONFIG_PACKAGE_mosdns=y
-CONFIG_PACKAGE_luci-app-mosdns=y
-CONFIG_PACKAGE_luci-app-mosdns_I18n_zh-cn=y
-
-# 3. 集客 AC 控制器（无线网络 AP 管理）
+# 集客 AC 控制器
 CONFIG_PACKAGE_luci-app-gecoosac=y
 CONFIG_PACKAGE_luci-app-gecoosac_I18n_zh-cn=y
 
-# ------ 高通平台常用加速/工具（按需，512MB 建议保留最小集） ------
-CONFIG_PACKAGE_luci-app-qca-ppe-qos=y
-CONFIG_PACKAGE_luci-app-fullconenat-sonic=y
+# ------ 基础必要组件（建议保留） ------
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-package-manager=y
 
-# ------ 【强力删减】剔除一切无用、臃肿插件，杜绝死机 ------
+# ------ 强力精简（全部关闭，降低编译风险和内存占用） ------
 
-# 剔除其他科学上网后台，防止冲突与吃内存
+# 其他科学上网插件全部关闭，避免冲突
 # CONFIG_PACKAGE_luci-app-homeproxy is not set
 # CONFIG_PACKAGE_luci-app-openclash is not set
 # CONFIG_PACKAGE_luci-app-ssr-plus is not set
-# CONFIG_PACKAGE_luci-app-nikki is not set
 # CONFIG_PACKAGE_luci-app-passwall is not set
+# CONFIG_PACKAGE_luci-app-nikki is not set
 
-# 剔除网络存储、离线下载及 Docker（亚瑟 512MB 内存绝不能碰）
+# 存储 / Docker / 下载类全部关闭（512MB 设备不适合）
 # CONFIG_PACKAGE_luci-app-samba4 is not set
-# CONFIG_PACKAGE_luci-app-mini-diskmanager is not set
 # CONFIG_PACKAGE_luci-app-dockerman is not set
-# CONFIG_PACKAGE_luci-app-vsftpd is not set
 # CONFIG_PACKAGE_luci-app-aria2 is not set
 # CONFIG_PACKAGE_luci-app-qbittorrent is not set
+# CONFIG_PACKAGE_luci-app-vsftpd is not set
+# CONFIG_PACKAGE_luci-app-mini-diskmanager is not set
 
-# 剔除其他不必要的杂项工具，保持主路由绝对纯净
-# CONFIG_PACKAGE_luci-app-natmapt is not set
+# 其他非必要插件全部关闭
 # CONFIG_PACKAGE_luci-app-vantage is not set
-# CONFIG_PACKAGE_luci-app-wolultra is not set
-# CONFIG_PACKAGE_luci-app-zerotier is not set
 # CONFIG_PACKAGE_luci-app-upnp is not set
 # CONFIG_PACKAGE_luci-app-ddns is not set
 # CONFIG_PACKAGE_luci-app-ttyd is not set
-# CONFIG_PACKAGE_luci-app-easytier is not set
+# CONFIG_PACKAGE_luci-app-zerotier is not set
+# CONFIG_PACKAGE_luci-app-wolultra is not set
+# CONFIG_PACKAGE_luci-app-natmapt is not set
 # CONFIG_PACKAGE_luci-app-router-tool is not set
+# CONFIG_PACKAGE_luci-app-easytier is not set
+# CONFIG_PACKAGE_luci-app-mosdns is not set
 
 # =================================================================
-# 优化结束
-# 如仍失败，请优先提供完整 raw log 中真正的 error 行
+# 配置结束
+# 如仍编译失败，请把完整 error 日志中真正的错误行贴出来
 # =================================================================
