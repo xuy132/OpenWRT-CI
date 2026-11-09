@@ -1,19 +1,31 @@
 # =================================================================
 # 京东云亚瑟 512MB 精简稳定配置
-# 目标：PassWall2（支持 VLESS）+ 集客AC，优先保证编译通过
+# PassWall2（VLESS）+ 集客AC，保证能正常出 factory/sysupgrade
 # =================================================================
 
-# ------ 核心系统 ------
+# ------ 多设备/镜像相关（缺了会导致不出设备 bin）------
+CONFIG_TARGET_MULTI_PROFILE=y
 CONFIG_TARGET_PER_DEVICE_ROOTFS=y
+CONFIG_TARGET_ROOTFS_INITRAMFS=n
+
+# 编译加速
+CONFIG_CCACHE=y
+CONFIG_DEVEL=y
+
+# ------ 核心系统 ------
 CONFIG_PACKAGE_luci=y
+CONFIG_PACKAGE_luci-base=y
+CONFIG_PACKAGE_luci-compat=y
+CONFIG_PACKAGE_luci-lib-base=y
+CONFIG_PACKAGE_luci-lib-ipkg=y
+CONFIG_PACKAGE_luci-lua-runtime=y
 CONFIG_LUCI_LANG_zh_Hans=y
 
-# 轻量主题（低内存友好）
+# 轻量主题
 CONFIG_PACKAGE_luci-theme-argon=y
 
-# ------ 核心功能（必须保留） ------
-
-# PassWall2 + VLESS 支持
+# ------ 核心功能 ------
+# PassWall2 + VLESS
 CONFIG_PACKAGE_luci-app-passwall2=y
 CONFIG_PACKAGE_luci-app-passwall2_I18n_zh-cn=y
 CONFIG_PACKAGE_xray-core=y
@@ -21,44 +33,63 @@ CONFIG_PACKAGE_chinadns-ng=y
 CONFIG_PACKAGE_v2ray-geoip=y
 CONFIG_PACKAGE_v2ray-geosite=y
 
-# 集客 AC 控制器
+# 集客 AC
 CONFIG_PACKAGE_luci-app-gecoosac=y
 CONFIG_PACKAGE_luci-app-gecoosac_I18n_zh-cn=y
 
-# ------ 基础必要组件（建议保留） ------
+# 基础管理
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-package-manager=y
 
-# ------ 强力精简（全部关闭，降低编译风险和内存占用） ------
+# 全锥 NAT（原版常用）
+CONFIG_PACKAGE_fullconenat-sonic=y
 
-# 其他科学上网插件全部关闭，避免冲突
-# CONFIG_PACKAGE_luci-app-homeproxy is not set
-# CONFIG_PACKAGE_luci-app-openclash is not set
-# CONFIG_PACKAGE_luci-app-ssr-plus is not set
-# CONFIG_PACKAGE_luci-app-passwall is not set
-# CONFIG_PACKAGE_luci-app-nikki is not set
+# ------ 必要内核/组件（精简但保证可编过、可刷）------
+CONFIG_PACKAGE_kmod-tun=y
+CONFIG_PACKAGE_kmod-nft-tproxy=y
+CONFIG_PACKAGE_kmod-nft-socket=y
+CONFIG_PACKAGE_kmod-inet-diag=y
+CONFIG_PACKAGE_kmod-usb3=y
+CONFIG_PACKAGE_kmod-usb-core=y
+CONFIG_PACKAGE_kmod-usb-storage=y
+CONFIG_PACKAGE_autocore=y
+CONFIG_PACKAGE_htop=y
+CONFIG_PACKAGE_curl=y
+CONFIG_PACKAGE_ca-bundle=y
+CONFIG_PACKAGE_openssh-sftp-server=y
 
-# 存储 / Docker / 下载类全部关闭（512MB 设备不适合）
-# CONFIG_PACKAGE_luci-app-samba4 is not set
-# CONFIG_PACKAGE_luci-app-dockerman is not set
-# CONFIG_PACKAGE_luci-app-aria2 is not set
-# CONFIG_PACKAGE_luci-app-qbittorrent is not set
-# CONFIG_PACKAGE_luci-app-vsftpd is not set
-# CONFIG_PACKAGE_luci-app-mini-diskmanager is not set
+# ------ 明确关闭（用 =n，注释无效）------
+CONFIG_PACKAGE_luci-app-homeproxy=n
+CONFIG_PACKAGE_luci-app-openclash=n
+CONFIG_PACKAGE_luci-app-ssr-plus=n
+CONFIG_PACKAGE_luci-app-passwall=n
+CONFIG_PACKAGE_luci-app-nikki=n
+CONFIG_PACKAGE_luci-app-mosdns=n
 
-# 其他非必要插件全部关闭
-# CONFIG_PACKAGE_luci-app-vantage is not set
-# CONFIG_PACKAGE_luci-app-upnp is not set
-# CONFIG_PACKAGE_luci-app-ddns is not set
-# CONFIG_PACKAGE_luci-app-ttyd is not set
-# CONFIG_PACKAGE_luci-app-zerotier is not set
-# CONFIG_PACKAGE_luci-app-wolultra is not set
-# CONFIG_PACKAGE_luci-app-natmapt is not set
-# CONFIG_PACKAGE_luci-app-router-tool is not set
-# CONFIG_PACKAGE_luci-app-easytier is not set
-# CONFIG_PACKAGE_luci-app-mosdns is not set
+CONFIG_PACKAGE_luci-app-samba4=n
+CONFIG_PACKAGE_luci-app-dockerman=n
+CONFIG_PACKAGE_luci-app-aria2=n
+CONFIG_PACKAGE_luci-app-qbittorrent=n
+CONFIG_PACKAGE_luci-app-vsftpd=n
+CONFIG_PACKAGE_luci-app-mini-diskmanager=n
+
+CONFIG_PACKAGE_luci-app-vantage=n
+CONFIG_PACKAGE_luci-app-upnp=n
+CONFIG_PACKAGE_luci-app-ddns=n
+CONFIG_PACKAGE_luci-app-ttyd=n
+CONFIG_PACKAGE_luci-app-zerotier=n
+CONFIG_PACKAGE_luci-app-wolultra=n
+CONFIG_PACKAGE_luci-app-natmapt=n
+CONFIG_PACKAGE_luci-app-router-tool=n
+CONFIG_PACKAGE_luci-app-easytier=n
+CONFIG_PACKAGE_luci-app-attendedsysupgrade=n
+CONFIG_PACKAGE_luci-app-wol=n
+
+# 不需要的 feed（可选，减小拉取）
+CONFIG_FEED_video=n
+CONFIG_FEED_pon_drivers=n
+CONFIG_FEED_pon_userspace=n
 
 # =================================================================
 # 配置结束
-# 如仍编译失败，请把完整 error 日志中真正的错误行贴出来
 # =================================================================
