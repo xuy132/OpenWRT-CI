@@ -21,8 +21,6 @@ CONFIG_PACKAGE_luci-lib-ipkg=y
 CONFIG_PACKAGE_luci-lua-runtime=y
 CONFIG_LUCI_LANG_zh_Hans=y
 
-# 轻量主题
-#CONFIG_PACKAGE_luci-theme-argon=n
 
 # ------ 核心功能 ------
 # PassWall（原版）+ VLESS 支持
@@ -35,7 +33,7 @@ CONFIG_PACKAGE_chinadns-ng=y
 # 集客 AC
 CONFIG_PACKAGE_luci-app-gecoosac=y
 CONFIG_PACKAGE_luci-app-gecoosac_I18n_zh-cn=y
-
+CONFIG_PACKAGE_luci-app-mosdns=y
 # 基础管理
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-package-manager=y
@@ -43,19 +41,6 @@ CONFIG_PACKAGE_luci-app-package-manager=y
 # 全锥 NAT（原版常用）
 CONFIG_PACKAGE_fullconenat-sonic=y
 
-# ------ 必要内核/组件（精简但保证可编过、可刷）------
-CONFIG_PACKAGE_kmod-tun=y
-CONFIG_PACKAGE_kmod-nft-tproxy=y
-CONFIG_PACKAGE_kmod-nft-socket=y
-CONFIG_PACKAGE_kmod-inet-diag=y
-CONFIG_PACKAGE_kmod-usb3=y
-CONFIG_PACKAGE_kmod-usb-core=y
-CONFIG_PACKAGE_kmod-usb-storage=y
-CONFIG_PACKAGE_autocore=y
-CONFIG_PACKAGE_htop=y
-CONFIG_PACKAGE_curl=y
-CONFIG_PACKAGE_ca-bundle=y
-CONFIG_PACKAGE_openssh-sftp-server=y
 
 # ------ 明确关闭（用 =n，注释无效）------
 CONFIG_PACKAGE_luci-app-homeproxy=n
@@ -63,32 +48,5 @@ CONFIG_PACKAGE_luci-app-openclash=n
 CONFIG_PACKAGE_luci-app-ssr-plus=n
 CONFIG_PACKAGE_luci-app-passwall2=n
 CONFIG_PACKAGE_luci-app-nikki=n
-CONFIG_PACKAGE_luci-app-mosdns=y
 
-CONFIG_PACKAGE_luci-app-samba4=n
-CONFIG_PACKAGE_luci-app-dockerman=n
-CONFIG_PACKAGE_luci-app-aria2=n
-CONFIG_PACKAGE_luci-app-qbittorrent=n
-CONFIG_PACKAGE_luci-app-vsftpd=n
-CONFIG_PACKAGE_luci-app-mini-diskmanager=n
 
-CONFIG_PACKAGE_luci-app-vantage=n
-CONFIG_PACKAGE_luci-app-upnp=n
-CONFIG_PACKAGE_luci-app-ddns=n
-CONFIG_PACKAGE_luci-app-ttyd=n
-CONFIG_PACKAGE_luci-app-zerotier=n
-CONFIG_PACKAGE_luci-app-wolultra=n
-CONFIG_PACKAGE_luci-app-natmapt=n
-CONFIG_PACKAGE_luci-app-router-tool=n
-CONFIG_PACKAGE_luci-app-easytier=n
-CONFIG_PACKAGE_luci-app-attendedsysupgrade=n
-CONFIG_PACKAGE_luci-app-wol=n
-
-# 不需要的 feed（可选，减小拉取）
-CONFIG_FEED_video=n
-CONFIG_FEED_pon_drivers=n
-CONFIG_FEED_pon_userspace=n
-
-# =================================================================
-# 配置结束
-# =================================================================
