@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: MIT
+# 自定义：SBE1V1K + 京东云亚瑟
+
+name: MY-DEVICES
+
+on:
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      PACKAGE:
+        description: '手动调整插件包，多个请用\n符号隔开。'
+        required: false
+        type: string
+      TEST:
+        description: '仅输出配置文件，不编译固件。'
+        default: false
+        required: false
+        type: boolean
+
+permissions: write-all
+
+jobs:
+  config:
+    name: ${{ matrix.CONFIG }}
+    strategy:
+      fail-fast: false
+      matrix:
+        CONFIG:
+          - IPQ95XX-SBE1V1K
+          - IPQ60XX-JDC
+        SOURCE: [VIKINGYFY/immortalwrt]
+        BRANCH: [owrt]
+
+    uses: ./.github/workflows/WRT-CORE.yml
+    with:
+      # 编译配置
+      WRT_CONFIG: ${{ matrix.CONFIG }}
+      # 默认主题
+      WRT_THEME: vantage
+      # 默认主机名
+      WRT_NAME: XOWRT
+      # 默认 WIFI 名称
+      WRT_SSID: XOWRT
+      # 默认 WIFI 密码
+      WRT_WORD: 1234567890
+      # 默认地址
+      WRT_IP: 10.0.0.2
+      # 默认密码提示
+      WRT_PW: 无
+      # 源码链接
+      WRT_REPO: https://github.com/${{ matrix.SOURCE }}.git
+      # 源码分支
+      WRT_BRANCH: ${{ matrix.BRANCH }}
+      # 源码名称
+      WRT_SOURCE: ${{ matrix.SOURCE }}
+      # 插件调整
+      WRT_PACKAGE: ${{ inputs.PACKAGE }}
+      # 仅输出配置文件
+      WRT_TEST: ${{ inputs.TEST || false }}
