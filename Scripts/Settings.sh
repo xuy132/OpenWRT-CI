@@ -24,7 +24,7 @@ sed -i "s/192\.168\.[0-9]*\.[0-9]*/$WRT_IP/g" $CFG_FILE
 #修改默认主机名
 sed -i "s/hostname='.*'/hostname='$WRT_NAME'/g" $CFG_FILE
 # 复制自定义文件（uci-defaults 等）
-[ -d "$GITHUB_WORKSPACE/files" ] && cp -a "$GITHUB_WORKSPACE/files/." ./
+# [ -d "$GITHUB_WORKSPACE/files" ] && cp -a "$GITHUB_WORKSPACE/files/." ./
 
 #配置文件修改
 echo "CONFIG_PACKAGE_luci=y" >> ./.config
