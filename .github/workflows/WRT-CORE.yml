@@ -187,7 +187,8 @@ jobs:
           if [[ "${WRT_CONFIG,,}" == *"test"* ]]; then
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
           else
-            cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
+            # 先加载通用配置，再加载设备专用配置（设备配置优先级更高）
+            cat $GITHUB_WORKSPACE/Config/GENERAL.txt $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
           fi
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
