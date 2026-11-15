@@ -2,7 +2,7 @@
 CONFIG_TARGET_qualcommbe=y
 CONFIG_TARGET_qualcommbe_ipq95xx=y
 
-#设备列表（仅 SBE1V1K）
+#设备列表
 CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_askey_sbe1v1k=y
 
 #科学插件（只保留 OpenClash）
@@ -19,7 +19,7 @@ CONFIG_PACKAGE_luci-app-upnp=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-firewall=y
 
-# Docker 相关（全部关闭，避免启动阶段 cgroup/存储冲突导致无限重启）
+# Docker 相关（全部关闭，当前阶段优先保证网络可用）
 CONFIG_PACKAGE_luci-app-dockerman=n
 CONFIG_PACKAGE_luci-app-docker=n
 CONFIG_PACKAGE_docker=n
@@ -50,7 +50,7 @@ CONFIG_TARGET_MULTI_PROFILE=y
 CONFIG_TARGET_PER_DEVICE_ROOTFS=y
 CONFIG_TARGET_ROOTFS_INITRAMFS=n
 
-#内核模块（保留网络关键 + 实用）
+#内核模块
 CONFIG_PACKAGE_kmod-nft-offload=y
 CONFIG_PACKAGE_kmod-nft-tproxy=y
 CONFIG_PACKAGE_kmod-tun=y
