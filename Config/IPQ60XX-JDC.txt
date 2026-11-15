@@ -6,21 +6,35 @@ CONFIG_TARGET_qualcommax_ipq60xx=y
 CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_jdcloud_re-cs-02=y
 CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_jdcloud_re-ss-01=y
 
-#科学插件（只保留轻量）
+#科学插件（只保留一个轻量）
 CONFIG_PACKAGE_luci-app-nikki=y
+CONFIG_PACKAGE_luci-app-openclash=n
+CONFIG_PACKAGE_luci-app-homeproxy=n
+CONFIG_PACKAGE_luci-app-passwall=n
+CONFIG_PACKAGE_luci-app-ssr-plus=n
 
-#常用插件（精简）
+#常用轻量插件
 CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-app-upnp=y
-CONFIG_PACKAGE_luci-app-wolultra=y
+CONFIG_PACKAGE_luci-app-ttyd=y
+CONFIG_PACKAGE_luci-app-firewall=y
 
-#删除不需要的
-CONFIG_PACKAGE_luci-app-attendedsysupgrade=n
-CONFIG_PACKAGE_luci-app-wol=n
+# 关闭所有重插件（512MB 内存优先）
+CONFIG_PACKAGE_luci-app-wolultra=n
 CONFIG_PACKAGE_luci-app-samba4=n
 CONFIG_PACKAGE_luci-app-filebrowser=n
 CONFIG_PACKAGE_luci-app-dockerman=n
 CONFIG_PACKAGE_luci-app-docker=n
+CONFIG_PACKAGE_docker=n
+CONFIG_PACKAGE_dockerd=n
+CONFIG_PACKAGE_luci-app-attendedsysupgrade=n
+CONFIG_PACKAGE_luci-app-wol=n
+CONFIG_PACKAGE_luci-app-gecoosac=n
+CONFIG_PACKAGE_luci-app-natmapt=n
+CONFIG_PACKAGE_luci-app-mini-diskmanager=n
+CONFIG_PACKAGE_luci-app-partexp=n
+CONFIG_PACKAGE_luci-app-vantage=n
+CONFIG_PACKAGE_luci-app-router-tool=n
 
 #参数调整
 CONFIG_CCACHE=y
@@ -37,7 +51,6 @@ CONFIG_PACKAGE_kmod-usb-storage=y
 CONFIG_PACKAGE_kmod-usb-storage-uas=y
 CONFIG_PACKAGE_kmod-fs-exfat=y
 CONFIG_PACKAGE_kmod-fs-ext4=y
-CONFIG_PACKAGE_kmod-fs-ntfs3=y
 
 #精简组件
 CONFIG_PACKAGE_autocore=y
@@ -49,5 +62,5 @@ CONFIG_PACKAGE_luci-base=y
 CONFIG_PACKAGE_luci-compat=y
 CONFIG_PACKAGE_block-mount=y
 CONFIG_PACKAGE_e2fsprogs=y
-CONFIG_PACKAGE_fdisk=y
-CONFIG_PACKAGE_lsblk=y
+CONFIG_PACKAGE_ca-certificates=y
+CONFIG_PACKAGE_ca-bundle=y
