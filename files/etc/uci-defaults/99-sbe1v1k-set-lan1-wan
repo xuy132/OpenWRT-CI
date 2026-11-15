@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# 只在 SBE1V1K 上执行
+board=$(cat /tmp/sysinfo/board_name 2>/dev/null || echo "")
+case "$board" in
+    *sbe1v1k*|*SBE1V1K*|*rtq7300t*)
+        ;;
+    *)
+        exit 0
+        ;;
+esac
+
+# 把 lan1（2.5G）改成 WAN，lan2/lan3 保留为 LAN
+uci -q delete network.@device[0].ports
+uci add_list network.@device[0].ports='lan2'
+uci add_list network.@device[0].ports='lan3'
+
+uci set network.wan.device='lan1'
+uci set network.wan6.device='lan1'
+
+uci commit network
+
+exit 0
