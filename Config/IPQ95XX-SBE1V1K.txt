@@ -39,13 +39,22 @@ CONFIG_PACKAGE_ca-bundle=y
 CONFIG_PACKAGE_ca-certificates=y
 CONFIG_PACKAGE_curl=y
 
-# Docker 这一版先继续关
-CONFIG_PACKAGE_luci-app-dockerman=n
-CONFIG_PACKAGE_luci-app-docker=n
-CONFIG_PACKAGE_docker=n
-CONFIG_PACKAGE_dockerd=n
+# Docker 精简（够用）
+CONFIG_PACKAGE_luci-app-dockerman=y
+CONFIG_PACKAGE_docker=y
+CONFIG_PACKAGE_dockerd=y
+CONFIG_PACKAGE_containerd=y
+CONFIG_PACKAGE_runc=y
+CONFIG_PACKAGE_tini=y
 CONFIG_PACKAGE_docker-compose=n
-CONFIG_PACKAGE_containerd=n
-CONFIG_PACKAGE_runc=n
-CONFIG_PACKAGE_tini=n
 CONFIG_PACKAGE_cgroupfs-mount=n
+
+# Docker 内核模块
+CONFIG_PACKAGE_kmod-veth=y
+CONFIG_PACKAGE_kmod-br-netfilter=y
+CONFIG_PACKAGE_kmod-nf-nat=y
+CONFIG_PACKAGE_kmod-nf-nathelper=y
+CONFIG_PACKAGE_kmod-nf-nathelper-extra=y
+CONFIG_PACKAGE_kmod-dummy=y
+# CONFIG_PACKAGE_kmod-ikconfig=n
+
