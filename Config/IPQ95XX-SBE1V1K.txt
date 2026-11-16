@@ -2,13 +2,13 @@
 CONFIG_TARGET_qualcommbe=y
 CONFIG_TARGET_qualcommbe_ipq95xx=y
 
-#设备列表（先和原作者一样多选，验证能启动后再精简）
+# 只编 SBE1V1K（减多设备 rootfs 负担）
 CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_askey_sbe1v1k=y
-CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_nokia_beacon-10=y
-CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be7000=y
-CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be7000-es=y
-CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be10000=y
-CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be10000-es=y
+# CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_nokia_beacon-10 is not set
+# CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be7000 is not set
+# CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be7000-es is not set
+# CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be10000 is not set
+# CONFIG_TARGET_DEVICE_qualcommbe_ipq95xx_DEVICE_xiaomi_be10000-es is not set
 
 # 强制 SBE1V1K 关键包（必须 =y，不能是 m）
 CONFIG_PACKAGE_ipq-wifi-askey_sbe1v1k=y
@@ -24,13 +24,13 @@ CONFIG_PACKAGE_kmod-qrtr-smd=y
 
 # 科学插件：只开 OpenClash
 CONFIG_PACKAGE_luci-app-openclash=y
-CONFIG_PACKAGE_luci-app-homeproxy=n
-CONFIG_PACKAGE_luci-app-passwall=n
-CONFIG_PACKAGE_luci-app-ssr-plus=n
-CONFIG_PACKAGE_luci-app-nikki=n
-CONFIG_PACKAGE_luci-app-Open-Box=n
+# CONFIG_PACKAGE_luci-app-homeproxy is not set
+# CONFIG_PACKAGE_luci-app-passwall is not set
+# CONFIG_PACKAGE_luci-app-ssr-plus is not set
+# CONFIG_PACKAGE_luci-app-nikki is not set
+# CONFIG_PACKAGE_luci-app-Open-Box is not set
 
-# OpenClash 常用依赖（强制）
+# OpenClash 依赖
 CONFIG_PACKAGE_kmod-tun=y
 CONFIG_PACKAGE_kmod-nft-tproxy=y
 CONFIG_PACKAGE_kmod-inet-diag=y
@@ -39,17 +39,23 @@ CONFIG_PACKAGE_ca-bundle=y
 CONFIG_PACKAGE_ca-certificates=y
 CONFIG_PACKAGE_curl=y
 
-# Docker 最小可用
+# Docker 最小组（还要体积的话，整段改成下面「不要 Docker」）
 CONFIG_PACKAGE_luci-app-dockerman=y
 CONFIG_PACKAGE_docker=y
 CONFIG_PACKAGE_dockerd=y
 CONFIG_PACKAGE_containerd=y
 CONFIG_PACKAGE_runc=y
 CONFIG_PACKAGE_tini=y
+CONFIG_PACKAGE_kmod-veth=y
+CONFIG_PACKAGE_kmod-br-netfilter=y
+CONFIG_PACKAGE_kmod-nf-nat=y
+CONFIG_PACKAGE_kmod-nf-nathelper=y
+CONFIG_PACKAGE_kmod-nf-nathelper-extra=y
+CONFIG_PACKAGE_kmod-dummy=y
 
-# 强烈建议关掉（体积大户）
-CONFIG_PACKAGE_docker-compose=n
-
-# 不需要 btrfs 存镜像的话也可以关
-CONFIG_PACKAGE_btrfs-progs=n
-CONFIG_PACKAGE_kmod-fs-btrfs=n
+# 强制关掉体积大户（必须 is not set）
+# CONFIG_PACKAGE_docker-compose is not set
+# CONFIG_PACKAGE_btrfs-progs is not set
+# CONFIG_PACKAGE_kmod-fs-btrfs is not set
+# CONFIG_PACKAGE_cgroupfs-mount is not set
+# CONFIG_PACKAGE_ruby is not set
