@@ -21,3 +21,31 @@ CONFIG_PACKAGE_kmod-phy-aquantia=y
 CONFIG_PACKAGE_kmod-phy-qca83xx=y
 CONFIG_PACKAGE_kmod-qrtr-mhi=y
 CONFIG_PACKAGE_kmod-qrtr-smd=y
+
+# 科学插件：只开 OpenClash
+CONFIG_PACKAGE_luci-app-openclash=y
+CONFIG_PACKAGE_luci-app-homeproxy=n
+CONFIG_PACKAGE_luci-app-passwall=n
+CONFIG_PACKAGE_luci-app-ssr-plus=n
+CONFIG_PACKAGE_luci-app-nikki=n
+CONFIG_PACKAGE_luci-app-Open-Box=n
+
+# OpenClash 常用依赖（强制）
+CONFIG_PACKAGE_kmod-tun=y
+CONFIG_PACKAGE_kmod-nft-tproxy=y
+CONFIG_PACKAGE_kmod-inet-diag=y
+CONFIG_PACKAGE_ip-full=y
+CONFIG_PACKAGE_ca-bundle=y
+CONFIG_PACKAGE_ca-certificates=y
+CONFIG_PACKAGE_curl=y
+
+# Docker 这一版先继续关
+CONFIG_PACKAGE_luci-app-dockerman=n
+CONFIG_PACKAGE_luci-app-docker=n
+CONFIG_PACKAGE_docker=n
+CONFIG_PACKAGE_dockerd=n
+CONFIG_PACKAGE_docker-compose=n
+CONFIG_PACKAGE_containerd=n
+CONFIG_PACKAGE_runc=n
+CONFIG_PACKAGE_tini=n
+CONFIG_PACKAGE_cgroupfs-mount=n
