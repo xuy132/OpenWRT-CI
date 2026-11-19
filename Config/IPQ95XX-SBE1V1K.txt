@@ -46,3 +46,7 @@ CONFIG_PACKAGE_hysteria=y
 
 # dns插件：只开 mosdns
 CONFIG_PACKAGE_luci-app-mosdns=y
+
+# 不打包完整 geodata，刷机后再下载
+# CONFIG_PACKAGE_v2ray-geoip is not set
+# CONFIG_PACKAGE_v2ray-geosite is not set
