@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# 只在 SBE1V1K 上执行，其他设备直接退出
+board=$(cat /tmp/sysinfo/board_name 2>/dev/null || echo "")
+case "$board" in
+    *sbe1v1k*|*SBE1V1K*|*rtq7300t*)
+        ;;
+    *)
+        exit 0
+        ;;
+esac
+
+# 创建目录
+mkdir -p /usr/share/v2ray
+mkdir -p /etc/openclash
+
+# 软链接：Passwall / mosdns / xray 共用 OpenClash 的 geo 数据
+# 目标文件首次由 OpenClash / mosdns 在线下载后自动可用
+ln -sf /etc/openclash/GeoIP.dat   /usr/share/v2ray/geoip.dat
+ln -sf /etc/openclash/GeoSite.dat /usr/share/v2ray/geosite.dat
+
+# 兼容小写文件名（部分版本会下载成小写）
+ln -sf /etc/openclash/GeoIP.dat   /usr/share/v2ray/GeoIP.dat
+ln -sf /etc/openclash/GeoSite.dat /usr/share/v2ray/GeoSite.dat
+
+exit 0
