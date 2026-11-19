@@ -22,14 +22,27 @@ CONFIG_PACKAGE_kmod-phy-qca83xx=y
 CONFIG_PACKAGE_kmod-qrtr-mhi=y
 CONFIG_PACKAGE_kmod-qrtr-smd=y
 
-# 科学插件：只开 OpenClash
+# 科学插件：开启 Passwall + OpenClash（可按需二选一）
 CONFIG_PACKAGE_luci-app-openclash=y
+CONFIG_PACKAGE_luci-app-passwall=y
 # CONFIG_PACKAGE_luci-app-homeproxy is not set
-# CONFIG_PACKAGE_luci-app-passwall is not set
 # CONFIG_PACKAGE_luci-app-ssr-plus is not set
 # CONFIG_PACKAGE_luci-app-nikki is not set
 # CONFIG_PACKAGE_luci-app-Open-Box is not set
 
+# Passwall 依赖（VLESS 节点订阅必需）
+CONFIG_PACKAGE_xray-core=y
+CONFIG_PACKAGE_v2ray-geoip=y
+CONFIG_PACKAGE_v2ray-geosite=y
+CONFIG_PACKAGE_chinadns-ng=y
+CONFIG_PACKAGE_dns2socks=y
+CONFIG_PACKAGE_ipt2socks=y
+CONFIG_PACKAGE_microsocks=y
+CONFIG_PACKAGE_tcping=y
+CONFIG_PACKAGE_geoview=y
+# 可选增强（推荐）
+CONFIG_PACKAGE_sing-box=y
+CONFIG_PACKAGE_hysteria=y
+
 # dns插件：只开 mosdns
 CONFIG_PACKAGE_luci-app-mosdns=y
-
