@@ -1,0 +1,139 @@
+log:
+  level: error
+  file: "/var/log/mosdns.log"
+
+api:
+  http: "0.0.0.0:9091"
+
+plugins:
+  # ==================== 规则文件 ====================
+  - tag: geosite_cn
+    type: domain_set
+    args:
+      files:
+        - "/var/mosdns/geosite_cn.txt"
+        - "/var/mosdns/geosite_apple-cn.txt"
+
+  - tag: geosite_no_cn
+    type: domain_set
+    args:
+      files:
+        - "/var/mosdns/geosite_geolocation-!cn.txt"
+        - "/var/mosdns/geosite_gfw.txt"
+
+  - tag: geoip_cn
+    type: ip_set
+    args:
+      files:
+        - "/var/mosdns/geoip_cn.txt"
+
+  # 原版广告
+  - tag: geosite_ads
+    type: domain_set
+    args:
+      files:
+        - "/var/mosdns/geosite_category-ads-all.txt"
+
+  # 强化广告规则（自动更新到 /tmp）
+  - tag: ads_extra
+    type: domain_set
+    args:
+      files:
+        - "/tmp/mosdns_ads/anti-ad.txt"
+        - "/tmp/mosdns_ads/adguard.txt"
+
+  # ==================== 大缓存 ====================
+  - tag: lazy_cache
+    type: cache
+    args:
+      size: 32768
+      lazy_cache_ttl: 86400
+      dump_file: "/etc/mosdns/cache.dump"
+      dump_interval: 600
+
+  # ==================== 上游 ====================
+  - tag: forward_local
+    type: forward
+    args:
+      concurrent: 2
+      upstreams:
+        - addr: "https://dns.alidns.com/dns-query"
+          bootstrap: 223.5.5.5
+        - addr: "https://doh.pub/dns-query"
+          bootstrap: 1.12.12.12
+
+  - tag: forward_remote
+    type: forward
+    args:
+      concurrent: 2
+      upstreams:
+        - addr: "https://dns.cloudflare.com/dns-query"
+          bootstrap: 1.1.1.1
+        - addr: "https://dns.google/dns-query"
+          bootstrap: 8.8.8.8
+        - addr: "https://dns.sb/dns-query"
+          bootstrap: 185.222.222.222
+
+  # ==================== 序列 ====================
+  - tag: local_sequence
+    type: sequence
+    args:
+      - exec: $forward_local
+      - exec: ttl 300-86400
+
+  - tag: remote_sequence
+    type: sequence
+    args:
+      - exec: prefer_ipv4
+      - exec: $forward_remote
+      - exec: ttl 300-86400
+
+  - tag: fallback_sequence
+    type: sequence
+    args:
+      - exec: $forward_local
+      - matches: "!resp_ip $geoip_cn"
+        exec: drop_resp
+      - matches: has_resp
+        exec: accept
+      - exec: $remote_sequence
+
+  # 广告拦截
+  - tag: reject_ads
+    type: sequence
+    args:
+      - matches: qname $geosite_ads
+        exec: reject 3
+      - matches: qname $ads_extra
+        exec: reject 3
+
+  # ==================== 主逻辑 ====================
+  - tag: main_sequence
+    type: sequence
+    args:
+      - exec: $lazy_cache
+      - matches: has_resp
+        exec: accept
+
+      - matches: qtype 65
+        exec: reject 3
+
+      - exec: $reject_ads
+
+      - matches: qname $geosite_cn
+        exec: $local_sequence
+
+      - matches: qname $geosite_no_cn
+        exec: $remote_sequence
+
+      - exec: $fallback_sequence
+
+  - type: udp_server
+    args:
+      entry: main_sequence
+      listen: ":5335"
+
+  - type: tcp_server
+    args:
+      entry: main_sequence
+      listen: ":5335"
