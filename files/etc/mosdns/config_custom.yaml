@@ -1,3 +1,4 @@
+cat > /etc/mosdns/config_custom.yaml << 'EOF'
 log:
   level: error
   file: "/var/log/mosdns.log"
@@ -6,20 +7,26 @@ api:
   http: "0.0.0.0:9091"
 
 plugins:
-  # ==================== 规则文件 ====================
+  # 统计
+  - tag: stats_collector
+    type: stats_api
+    args:
+      capacity: 2000
+      dump_file: "/etc/mosdns/stats.dump"
+      dump_interval: 600
+
+  # 规则文件（只用目前存在的）
   - tag: geosite_cn
     type: domain_set
     args:
       files:
         - "/var/mosdns/geosite_cn.txt"
-        - "/var/mosdns/geosite_apple-cn.txt"
 
   - tag: geosite_no_cn
     type: domain_set
     args:
       files:
         - "/var/mosdns/geosite_geolocation-!cn.txt"
-        - "/var/mosdns/geosite_gfw.txt"
 
   - tag: geoip_cn
     type: ip_set
@@ -27,14 +34,7 @@ plugins:
       files:
         - "/var/mosdns/geoip_cn.txt"
 
-  # 原版广告
-  - tag: geosite_ads
-    type: domain_set
-    args:
-      files:
-        - "/var/mosdns/geosite_category-ads-all.txt"
-
-  # 强化广告规则（持久化路径）
+  # 广告
   - tag: ads_extra
     type: domain_set
     args:
@@ -42,7 +42,7 @@ plugins:
         - "/etc/mosdns/rule/ads/anti-ad.txt"
         - "/etc/mosdns/rule/ads/adguard.txt"
 
-  # ==================== 大缓存 ====================
+  # 大缓存
   - tag: lazy_cache
     type: cache
     args:
@@ -51,7 +51,7 @@ plugins:
       dump_file: "/etc/mosdns/cache.dump"
       dump_interval: 600
 
-  # ==================== 上游 ====================
+  # 上游
   - tag: forward_local
     type: forward
     args:
@@ -61,6 +61,8 @@ plugins:
           bootstrap: 223.5.5.5
         - addr: "https://doh.pub/dns-query"
           bootstrap: 1.12.12.12
+        - addr: 223.5.5.5
+        - addr: 119.29.29.29
 
   - tag: forward_remote
     type: forward
@@ -71,10 +73,10 @@ plugins:
           bootstrap: 1.1.1.1
         - addr: "https://dns.google/dns-query"
           bootstrap: 8.8.8.8
-        - addr: "https://dns.sb/dns-query"
-          bootstrap: 185.222.222.222
+        - addr: "tls://8.8.8.8"
+        - addr: "tls://1.1.1.1"
 
-  # ==================== 序列 ====================
+  # 序列
   - tag: local_sequence
     type: sequence
     args:
@@ -88,13 +90,6 @@ plugins:
       - exec: $forward_remote
       - exec: ttl 300-86400
 
-  - tag: has_resp
-    type: sequence
-    args:
-      - matches: has_resp
-        exec: accept
-
-  # fallback：先国内，非国内IP丢弃，再远程
   - tag: fallback_sequence
     type: sequence
     args:
@@ -105,36 +100,27 @@ plugins:
         exec: accept
       - exec: $remote_sequence
 
-  # 广告拦截
   - tag: reject_ads
     type: sequence
     args:
-      - matches: qname $geosite_ads
-        exec: reject 3
       - matches: qname $ads_extra
         exec: reject 3
 
-  # ==================== 主逻辑 ====================
+  # 主逻辑
   - tag: main_sequence
     type: sequence
     args:
+      - exec: $stats_collector
       - exec: $lazy_cache
-      - exec: jump has_resp
-
+      - matches: has_resp
+        exec: accept
       - matches: qtype 65
         exec: reject 3
-
       - exec: $reject_ads
-      - exec: jump has_resp
-
       - matches: qname $geosite_cn
         exec: $local_sequence
-      - exec: jump has_resp
-
       - matches: qname $geosite_no_cn
         exec: $remote_sequence
-      - exec: jump has_resp
-
       - exec: $fallback_sequence
 
   - type: udp_server
@@ -146,3 +132,4 @@ plugins:
     args:
       entry: main_sequence
       listen: ":5335"
+EOF
