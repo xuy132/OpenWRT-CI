@@ -1,0 +1,3 @@
+uci set mosdns.config.configfile='/etc/mosdns/config_custom.yaml'
+uci set mosdns.config.enabled='1'
+uci commit mosdns
