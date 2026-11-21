@@ -14,17 +14,21 @@ plugins:
       dump_file: "/etc/mosdns/stats.dump"
       dump_interval: 300
 
+  # 国内域名（多文件）
   - tag: geosite_cn
     type: domain_set
     args:
       files:
         - "/var/mosdns/geosite_cn.txt"
+        - "/var/mosdns/geosite_apple-cn.txt"
 
+  # 国外/被墙域名（多文件）
   - tag: geosite_no_cn
     type: domain_set
     args:
       files:
         - "/var/mosdns/geosite_geolocation-!cn.txt"
+        - "/var/mosdns/geosite_gfw.txt"
 
   - tag: geoip_cn
     type: ip_set
@@ -32,12 +36,14 @@ plugins:
       files:
         - "/var/mosdns/geoip_cn.txt"
 
+  # 广告（三重强化）
   - tag: ads_extra
     type: domain_set
     args:
       files:
         - "/etc/mosdns/rule/ads/anti-ad.txt"
         - "/etc/mosdns/rule/ads/adguard.txt"
+        - "/var/mosdns/geosite_category-ads-all.txt"
 
   - tag: lazy_cache
     type: cache
@@ -99,14 +105,11 @@ plugins:
     args:
       - exec: $stats_collector
 
-      # 硬编码测试（确认匹配逻辑本身是否通）
-      - matches: qname doubleclick.net
-        exec: reject 3
-
-      # 广告列表
+      # 广告优先拦截
       - matches: qname $ads_extra
         exec: reject 3
 
+      # 屏蔽 TYPE65
       - matches: qtype 65
         exec: reject 3
 
