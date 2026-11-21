@@ -7,15 +7,13 @@ api:
   http: "0.0.0.0:9091"
 
 plugins:
-  # 统计
   - tag: stats_collector
     type: stats_api
     args:
-      capacity: 2000
+      capacity: 3000
       dump_file: "/etc/mosdns/stats.dump"
-      dump_interval: 600
+      dump_interval: 300
 
-  # 规则文件（只用目前存在的）
   - tag: geosite_cn
     type: domain_set
     args:
@@ -34,7 +32,6 @@ plugins:
       files:
         - "/var/mosdns/geoip_cn.txt"
 
-  # 广告
   - tag: ads_extra
     type: domain_set
     args:
@@ -42,7 +39,6 @@ plugins:
         - "/etc/mosdns/rule/ads/anti-ad.txt"
         - "/etc/mosdns/rule/ads/adguard.txt"
 
-  # 大缓存
   - tag: lazy_cache
     type: cache
     args:
@@ -51,7 +47,6 @@ plugins:
       dump_file: "/etc/mosdns/cache.dump"
       dump_interval: 600
 
-  # 上游
   - tag: forward_local
     type: forward
     args:
@@ -76,7 +71,6 @@ plugins:
         - addr: "tls://8.8.8.8"
         - addr: "tls://1.1.1.1"
 
-  # 序列
   - tag: local_sequence
     type: sequence
     args:
@@ -100,27 +94,32 @@ plugins:
         exec: accept
       - exec: $remote_sequence
 
-  - tag: reject_ads
-    type: sequence
-    args:
-      - matches: qname $ads_extra
-        exec: reject 3
-
-  # 主逻辑
   - tag: main_sequence
     type: sequence
     args:
       - exec: $stats_collector
+
+      # 硬编码测试（确认匹配逻辑本身是否通）
+      - matches: qname doubleclick.net
+        exec: reject 3
+
+      # 广告列表
+      - matches: qname $ads_extra
+        exec: reject 3
+
+      - matches: qtype 65
+        exec: reject 3
+
       - exec: $lazy_cache
       - matches: has_resp
         exec: accept
-      - matches: qtype 65
-        exec: reject 3
-      - exec: $reject_ads
+
       - matches: qname $geosite_cn
         exec: $local_sequence
+
       - matches: qname $geosite_no_cn
         exec: $remote_sequence
+
       - exec: $fallback_sequence
 
   - type: udp_server
