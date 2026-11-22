@@ -20,7 +20,7 @@ plugins:
     args:
       files:
         - "/var/mosdns/geosite_cn.txt"
-        - "/var/mosdns/geosite_apple-cn.txt"
+        #- "/var/mosdns/geosite_apple-cn.txt"
 
   # 国外/被墙域名（多文件）
   - tag: geosite_no_cn
@@ -28,7 +28,7 @@ plugins:
     args:
       files:
         - "/var/mosdns/geosite_geolocation-!cn.txt"
-        - "/var/mosdns/geosite_gfw.txt"
+        #- "/var/mosdns/geosite_gfw.txt"
 
   - tag: geoip_cn
     type: ip_set
