@@ -1,15 +1,19 @@
-# 1. 写入配置
-cat > /etc/mosdns/config_custom.yaml << 'EOF'
-（把上面的 yaml 完整贴进去）
-EOF
+#!/bin/sh
 
-# 2. 确保广告目录和脚本存在
-mkdir -p /etc/mosdns/rule/ads
-# （把 update_ads.sh 内容写入并 chmod +x）
+# 使用自定义配置
+uci -q set mosdns.config.configfile='/etc/mosdns/config_custom.yaml'
+uci -q set mosdns.config.enabled='1'
+uci commit mosdns
 
-# 3. 先更新一次广告
-/etc/mosdns/update_ads.sh
+# 给脚本加执行权限
+chmod +x /etc/mosdns/update_ads.sh 2>/dev/null
+chmod +x /etc/mosdns/update_geo.sh 2>/dev/null
 
-# 4. 重启
-rm -f /etc/mosdns/cache.dump
-/etc/init.d/mosdns restart
+# 每天凌晨 3:20 更新 Geo，3:30 更新广告
+grep -q "update_geo.sh" /etc/crontabs/root 2>/dev/null || \
+  echo "20 3 * * * /etc/mosdns/update_geo.sh >/dev/null 2>&1" >> /etc/crontabs/root
+
+grep -q "update_ads.sh" /etc/crontabs/root 2>/dev/null || \
+  echo "30 3 * * * /etc/mosdns/update_ads.sh >/dev/null 2>&1" >> /etc/crontabs/root
+
+exit 0
