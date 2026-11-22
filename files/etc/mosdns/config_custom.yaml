@@ -1,4 +1,3 @@
-cat > /etc/mosdns/config_custom.yaml << 'EOF'
 log:
   level: error
   file: "/var/log/mosdns.log"
@@ -7,6 +6,7 @@ api:
   http: "0.0.0.0:9091"
 
 plugins:
+  # 统计
   - tag: stats_collector
     type: stats_api
     args:
@@ -14,21 +14,19 @@ plugins:
       dump_file: "/etc/mosdns/stats.dump"
       dump_interval: 300
 
-  # 国内域名（多文件）
+  # 国内域名（只用默认存在的文件）
   - tag: geosite_cn
     type: domain_set
     args:
       files:
         - "/var/mosdns/geosite_cn.txt"
-        - "/var/mosdns/geosite_apple-cn.txt"
 
-  # 国外/被墙域名（多文件）
+  # 国外域名（只用默认存在的文件）
   - tag: geosite_no_cn
     type: domain_set
     args:
       files:
         - "/var/mosdns/geosite_geolocation-!cn.txt"
-        - "/var/mosdns/geosite_gfw.txt"
 
   - tag: geoip_cn
     type: ip_set
@@ -36,15 +34,15 @@ plugins:
       files:
         - "/var/mosdns/geoip_cn.txt"
 
-  # 广告（三重强化）
+  # 广告（只用我们自己维护的文件）
   - tag: ads_extra
     type: domain_set
     args:
       files:
         - "/etc/mosdns/rule/ads/anti-ad.txt"
         - "/etc/mosdns/rule/ads/adguard.txt"
-        - "/var/mosdns/geosite_category-ads-all.txt"
 
+  # 大缓存
   - tag: lazy_cache
     type: cache
     args:
@@ -53,6 +51,7 @@ plugins:
       dump_file: "/etc/mosdns/cache.dump"
       dump_interval: 600
 
+  # 上游
   - tag: forward_local
     type: forward
     args:
@@ -77,6 +76,7 @@ plugins:
         - addr: "tls://8.8.8.8"
         - addr: "tls://1.1.1.1"
 
+  # 序列
   - tag: local_sequence
     type: sequence
     args:
@@ -100,6 +100,7 @@ plugins:
         exec: accept
       - exec: $remote_sequence
 
+  # 主逻辑
   - tag: main_sequence
     type: sequence
     args:
@@ -134,4 +135,3 @@ plugins:
     args:
       entry: main_sequence
       listen: ":5335"
-EOF
