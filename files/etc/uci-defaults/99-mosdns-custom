@@ -1,15 +1,15 @@
-#!/bin/sh
+# 1. 写入配置
+cat > /etc/mosdns/config_custom.yaml << 'EOF'
+（把上面的 yaml 完整贴进去）
+EOF
 
-# 启用自定义配置
-uci set mosdns.config.configfile='/etc/mosdns/config_custom.yaml'
-uci set mosdns.config.enabled='1'
-uci set mosdns.config.listen_port='5335'   # 根据需要
-uci commit mosdns
+# 2. 确保广告目录和脚本存在
+mkdir -p /etc/mosdns/rule/ads
+# （把 update_ads.sh 内容写入并 chmod +x）
 
-# 添加广告自动更新定时任务
-echo "30 3 * * * /etc/mosdns/update_ads.sh >/dev/null 2>&1" >> /etc/crontabs/root
+# 3. 先更新一次广告
+/etc/mosdns/update_ads.sh
 
-# 可选：首次启动后自动跑一次广告更新
-# /etc/mosdns/update_ads.sh &
-
-exit 0
+# 4. 重启
+rm -f /etc/mosdns/cache.dump
+/etc/init.d/mosdns restart
